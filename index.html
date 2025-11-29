@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Códigos iFood - Lista</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0 30px;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 8px;
+            color: #212529;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: #495057;
+            font-weight: 400;
+            margin-bottom: 15px;
+        }
+        
+        .divider {
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ea1d2c, transparent);
+            margin: 0 auto 20px;
+        }
+        
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        #searchInput {
+            width: 100%;
+            max-width: 500px;
+            padding: 16px 25px;
+            border: 2px solid #dee2e6;
+            border-radius: 50px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+            background: white;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        #searchInput:focus {
+            border-color: #ea1d2c;
+            box-shadow: 0 4px 20px rgba(234, 29, 44, 0.2);
+        }
+        
+        .apartments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .apartment-item {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 2px solid #ea1d2c;
+        }
+        
+        .apartment-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .apartment-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .apartment-number {
+            font-weight: bold;
+            color: #ea1d2c;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .apartment-number::before {
+            content: "🏠";
+            margin-right: 15px;
+            font-size: 1.6rem;
+        }
+        
+        .resident-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid #f1f3f4;
+        }
+        
+        .resident-item:hover {
+            background: rgba(234, 29, 44, 0.05);
+            border-radius: 8px;
+            padding-left: 15px;
+            padding-right: 15px;
+            margin: 0 -15px;
+        }
+        
+        .resident-item:last-child {
+            border-bottom: none;
+        }
+        
+        .resident-name {
+            font-weight: 600;
+            font-size: 17px;
+            color: #212529;
+            flex: 1;
+        }
+        
+        .codes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .code {
+            background: linear-gradient(135deg, #ea1d2c, #ff6b7a);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(234, 29, 44, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .code:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(234, 29, 44, 0.4);
+            background: linear-gradient(135deg, #ff4757, #ff6b7a);
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 80px 40px;
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .no-results h3 {
+            margin-bottom: 15px;
+            color: #ea1d2c;
+            font-size: 1.8rem;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #6c757d;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            padding: 20px;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .resident-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+                padding: 20px 0;
+            }
+            
+            .codes {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            .apartment-item {
+                padding: 20px;
+            }
+            
+            .apartment-number {
+                font-size: 1.5rem;
+            }
+            
+            .code {
+                padding: 8px 14px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-utensils"></i> Códigos iFood</h1>
+            <p class="subtitle">Lista organizada de códigos por apartamento</p>
+            <div class="divider"></div>
+        </header>
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="🔍 Buscar por nome ou apartamento...">
+        </div>
+        
+        <div class="apartments-list" id="apartmentsContainer">
+            <!-- Os apartamentos serão inseridos aqui via JavaScript -->
+        </div>
+        
+        <div class="footer">
+            <p>Lista atualizada • Clique nos códigos para copiar</p>
+        </div>
+    </div>
+
+    <script>
+        // Dados dos apartamentos e códigos
+        const apartmentsData = [
+            {
+                number: "AP 201",
+                residents: [
+                    { name: "Sandra", codes: ["2847"] }
+                ]
+            },
+            {
+                number: "AP 203",
+                residents: [
+                    { name: "Mariane Baptista", codes: ["9201"] }
+                ]
+            },
+            {
+                number: "AP 204",
+                residents: [
+                    { name: "Maria Eduarda Pinheiro Camargo", codes: ["7304"] },
+                    { name: "Julia Regina (visitante)", codes: ["0277"] },
+                    { name: "Vinícius", codes: ["4018"] }
+                ]
+            },
+            {
+                number: "AP 207",
+                residents: [
+                    { name: "Milles", codes: ["9593"] },
+                    { name: "Mônica Bertagnoli", codes: ["4480"] }
+                ]
+            },
+            {
+                number: "AP 209",
+                residents: [
+                    { name: "Mariane Lutz Fontanive", codes: ["4553"] }
+                ]
+            },
+            {
+                number: "AP 301",
+                residents: [
+                    { name: "Fabio Vitor", codes: ["0484"] },
+                    { name: "Ana Paula", codes: ["0112"] },
+                    { name: "Isabella Jordão", codes: ["3550", "6029", "6095", "4336"] },
+                    { name: "Gabriel", codes: ["6822"] },
+                    { name: "João Pedro (Visitante)", codes: ["7383"] }
+                ]
+            },
+            {
+                number: "AP 303",
+                residents: [
+                    { name: "Marcelo Silva", codes: ["0008"] },
+                    { name: "Luciana Marinho", codes: ["1364"] }
+                ]
+            },
+            {
+                number: "AP 304",
+                residents: [
+                    { name: "Danilo Toma", codes: ["7547"] },
+                    { name: "Caroline Bidóia", codes: ["4379"] },
+                    { name: "Solange Midori", codes: ["0279"] }
+                ]
+            },
+            {
+                number: "AP 307",
+                residents: [
+                    { name: "Lívia Valin", codes: ["0637"] },
+                    { name: "Isabella Costa Swart", codes: ["7200"] }
+                ]
+            },
+            {
+                number: "AP 401",
+                residents: [
+                    { name: "Ana Clara", codes: ["0127"] },
+                    { name: "Ana Beatriz", codes: ["0480"] },
+                    { name: "Ana Claudia", codes: ["5677"] },
+                    { name: "Gilberto", codes: ["5678"] }
+                ]
+            },
+            {
+                number: "AP 402",
+                residents: [
+                    { name: "Franco Faust", codes: ["2044"] },
+                    { name: "Maria Eduarda (Duda)", codes: ["3570"] },
+                    { name: "Julia (irmã da Maria Eduarda)", codes: ["1303"] }
+                ]
+            },
+            {
+                number: "AP 403",
+                residents: [
+                    { name: "Maria Júlia", codes: ["5354", "6880"] },
+                    { name: "Maria Ângela", codes: ["6262"] },
+                    { name: "Enzo Lecheta", codes: ["6880"] },
+                    { name: "Mariana Borges (visitante)", codes: ["2405"] }
+                ]
+            },
+            {
+                number: "AP 404",
+                residents: [
+                    { name: "Camille Power", codes: ["0414"] }
+                ]
+            },
+            {
+                number: "AP 405",
+                residents: [
+                    { name: "João Pedro Dutra", codes: ["3211"] },
+                    { name: "Luciana", codes: ["2511"] },
+                    { name: "Maria Paula Navarini Dutra", codes: ["6532"] }
+                ]
+            },
+            {
+                number: "AP 407",
+                residents: [
+                    { name: "Caroline", codes: ["3930"] },
+                    { name: "Eduarda Podgurski", codes: ["9394"] },
+                    { name: "Giane", codes: ["7445"] },
+                    { name: "Matheus", codes: ["5102"] }
+                ]
+            },
+            {
+                number: "AP 409",
+                residents: [
+                    { name: "Thiago Correa", codes: ["9765", "8388", "2342"] }
+                ]
+            },
+            {
+                number: "AP 501",
+                residents: [
+                    { name: "Maria Clara de Almeida", codes: ["5580", "9136"] }
+                ]
+            },
+            {
+                number: "AP 502",
+                residents: [
+                    { name: "Marcelle Rigodanzo", codes: ["8918"] },
+                    { name: "George Murilo", codes: ["5598"] }
+                ]
+            },
+            {
+                number: "AP 503",
+                residents: [
+                    { name: "Ana Mesquita", codes: ["1335"] }
+                ]
+            },
+            {
+                number: "AP 504",
+                residents: [
+                    { name: "Juliana Martos", codes: ["5232"] },
+                    { name: "Alan Gimenez Ribeiro", codes: ["6232"] }
+                ]
+            },
+            {
+                number: "AP 505",
+                residents: [
+                    { name: "Ana Luisa Zimmermann Pereira", codes: ["7091", "7016"] }
+                ]
+            },
+            {
+                number: "AP 509",
+                residents: [
+                    { name: "Julia Zortea", codes: ["0900"] },
+                    { name: "Thomas Souza", codes: ["6757"] }
+                ]
+            },
+            {
+                number: "AP 510",
+                residents: [
+                    { name: "Jeferson filho", codes: ["0674"] },
+                    { name: "Jeferson pai", codes: ["6696"] },
+                    { name: "Pedro Kolscheski", codes: ["0674"] }
+                ]
+            },
+            {
+                number: "AP 601",
+                residents: [
+                    { name: "João Eduardo", codes: ["9192"] },
+                    { name: "Ana Letícia", codes: ["4367"] }
+                ]
+            },
+            {
+                number: "AP 602",
+                residents: [
+                    { name: "Iudy Makino", codes: ["4715"] }
+                ]
+            },
+            {
+                number: "AP 604",
+                residents: [
+                    { name: "Bethina Piva", codes: ["1185"] },
+                    { name: "Vinicius Daledone", codes: ["9161"] }
+                ]
+            },
+            {
+                number: "AP 607",
+                residents: [
+                    { name: "Vinicius Silveira", codes: ["8331"] },
+                    { name: "Fernanda Warde", codes: ["1939"] }
+                ]
+            },
+            {
+                number: "AP 609",
+                residents: [
+                    { name: "Bruno Cezar", codes: ["7077"] },
+                    { name: "Victória Carvalho", codes: ["4929"] }
+                ]
+            },
+            {
+                number: "AP 701",
+                residents: [
+                    { name: "Ângela", codes: ["3148"] },
+                    { name: "Lino", codes: ["4163"] }
+                ]
+            },
+            {
+                number: "AP 702",
+                residents: [
+                    { name: "Lucas Hoinaski", codes: ["7070"] },
+                    { name: "Izabel Lunardi", codes: ["2850"] },
+                    { name: "Cauê Hoinaski Araujo", codes: ["5453"] }
+                ]
+            },
+            {
+                number: "AP 703",
+                residents: [
+                    { name: "Leonardo Assumpção", codes: ["1793"] },
+                    { name: "Deyse Amaral", codes: ["5926"] }
+                ]
+            },
+            {
+                number: "AP 704",
+                residents: [
+                    { name: "Maria Eduarda Tortato", codes: ["3366"] }
+                ]
+            },
+            {
+                number: "AP 705",
+                residents: [
+                    { name: "Alice", codes: ["0111"] },
+                    { name: "Afonso", codes: ["0862"] }
+                ]
+            },
+            {
+                number: "AP 706",
+                residents: [
+                    { name: "Gustavo Rodrigues", codes: ["2656"] },
+                    { name: "Luana Paula", codes: ["0550", "5372"] }
+                ]
+            },
+            {
+                number: "AP 707",
+                residents: [
+                    { name: "Joao Pedro Moreira Paganella", codes: ["6267"] }
+                ]
+            },
+            {
+                number: "AP 708",
+                residents: [
+                    { name: "Valentina", codes: ["1509"] }
+                ]
+            },
+            {
+                number: "AP 710",
+                residents: [
+                    { name: "Viviane Teixeira", codes: ["2923"] }
+                ]
+            },
+            {
+                number: "AP 801",
+                residents: [
+                    { name: "Mariana Ito", codes: ["5095"] },
+                    { name: "Eduardo Tatoito", codes: ["8563"] }
+                ]
+            },
+            {
+                number: "AP 802",
+                residents: [
+                    { name: "Denise Montanari", codes: ["6578"] }
+                ]
+            },
+            {
+                number: "AP 803",
+                residents: [
+                    { name: "Maria Luiza Tavares", codes: ["5854"] },
+                    { name: "Ana Paula Tavares", codes: ["7395", "2789"] }
+                ]
+            },
+            {
+                number: "AP 804",
+                residents: [
+                    { name: "Carolina Baumgarten", codes: ["0111"] },
+                    { name: "Marcia Valeria Baumgarten", codes: ["3454"] }
+                ]
+            },
+            {
+                number: "AP 805",
+                residents: [
+                    { name: "Itamar", codes: ["7532"] },
+                    { name: "Ines", codes: ["4521"] },
+                    { name: "Thiago Muller", codes: ["4625"] }
+                ]
+            },
+            {
+                number: "AP 806",
+                residents: [
+                    { name: "Felipe França de Oliveira", codes: ["0088"] },
+                    { name: "Gabrielle Rodrigues", codes: ["4967"] }
+                ]
+            },
+            {
+                number: "AP 808",
+                residents: [
+                    { name: "Douglas Felipe", codes: ["3332", "1590"] },
+                    { name: "Marcelo Mendes", codes: ["4439"] }
+                ]
+            },
+            {
+                number: "AP 809",
+                residents: [
+                    { name: "Fabricio Meyer", codes: ["5056"] },
+                    { name: "Viviane Canabarro", codes: ["9838"] }
+                ]
+            },
+            {
+                number: "AP 810",
+                residents: [
+                    { name: "Vitor Carvalho", codes: ["0812"] }
+                ]
+            },
+            {
+                number: "AP 901",
+                residents: [
+                    { name: "Júlio", codes: ["4947"] },
+                    { name: "Eliana", codes: ["5034"] }
+                ]
+            },
+            {
+                number: "AP 904",
+                residents: [
+                    { name: "Ana Carolina", codes: ["2288"] },
+                    { name: "Ivanete Alcantra", codes: ["0340"] }
+                ]
+            },
+            {
+                number: "AP 906",
+                residents: [
+                    { name: "Gustavo Pellizzaro", codes: ["7619"] },
+                    { name: "Cristiano Pellizzaro", codes: ["1925"] },
+                    { name: "Alandri Pellizarro", codes: ["0860"] }
+                ]
+            },
+            {
+                number: "AP 907",
+                residents: [
+                    { name: "Rafael Viers", codes: ["1397"] }
+                ]
+            },
+            {
+                number: "AP 908",
+                residents: [
+                    { name: "André", codes: ["5570", "4896", "7277"] }
+                ]
+            },
+            {
+                number: "AP 910",
+                residents: [
+                    { name: "Maitê Chiodini", codes: ["2526"] },
+                    { name: "Samuel Augusto", codes: ["5949"] },
+                    { name: "Luiza Chiodini Rudy", codes: ["2625"] }
+                ]
+            },
+            {
+                number: "AP 1001",
+                residents: [
+                    { name: "Henrique Borg", codes: ["9100"] },
+                    { name: "Rebeca Borg", codes: ["0002"] }
+                ]
+            },
+            {
+                number: "AP 1002",
+                residents: [
+                    { name: "Marcelo Torres", codes: ["3344"] },
+                    { name: "Kara Miller de Oliveira", codes: ["7321"] }
+                ]
+            }
+        ];
+
+        // Função para renderizar os apartamentos
+        function renderApartments(apartments) {
+            const container = document.getElementById('apartmentsContainer');
+            
+            if (apartments.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <h3>Nenhum resultado encontrado</h3>
+                        <p>Tente buscar por outro termo</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = apartments.map(apartment => `
+                <div class="apartment-item">
+                    <div class="apartment-header">
+                        <span class="apartment-number">${apartment.number}</span>
+                    </div>
+                    <div class="resident-list">
+                        ${apartment.residents.map(resident => `
+                            <div class="resident-item">
+                                <span class="resident-name">${resident.name}</span>
+                                <div class="codes">
+                                    ${resident.codes.map(code => `<span class="code" data-code="${code}">${code}</span>`).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+            
+            // Adiciona event listeners para os códigos
+            document.querySelectorAll('.code').forEach(codeElement => {
+                codeElement.addEventListener('click', (e) => {
+                    const code = e.target.getAttribute('data-code');
+                    navigator.clipboard.writeText(code).then(() => {
+                        const originalText = e.target.textContent;
+                        e.target.textContent = '✓ Copiado!';
+                        e.target.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                        setTimeout(() => {
+                            e.target.textContent = originalText;
+                            e.target.style.background = 'linear-gradient(135deg, #ea1d2c, #ff6b7a)';
+                        }, 2000);
+                    });
+                });
+            });
+        }
+
+        // Função de busca
+        function searchApartments(query) {
+            const normalizedQuery = query.toLowerCase().trim();
+            
+            if (!normalizedQuery) {
+                return apartmentsData;
+            }
+            
+            return apartmentsData.filter(apartment => {
+                // Verifica se o número do apartamento corresponde
+                if (apartment.number.toLowerCase().includes(normalizedQuery)) {
+                    return true;
+                }
+                
+                // Verifica se algum morador corresponde
+                return apartment.residents.some(resident => 
+                    resident.name.toLowerCase().includes(normalizedQuery)
+                );
+            });
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            // Renderiza todos os apartamentos inicialmente
+            renderApartments(apartmentsData);
+            
+            // Configura a busca
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                const results = searchApartments(e.target.value);
+                renderApartments(results);
+            });
+        });
+    </script>
+</body>
+</html>
